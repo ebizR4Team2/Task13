@@ -1,0 +1,57 @@
+package model;
+
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+
+import model.beans.CommentBean;
+import model.beans.DisplayCommentBean;
+import model.beans.TweetBean;
+import model.beans.User;
+import model.dao.CommentDAO;
+import model.dao.TweetDAO;
+import model.dao.UserStatisticsDAO;
+import model.rest.TwitterUtil;
+
+import org.genericdao.ConnectionPool;
+import org.genericdao.DAOException;
+import org.genericdao.RollbackException;
+
+public class Model {
+	// keep private instances of DAOs
+	private CommentDAO commentDAO;
+	private TweetDAO tweetDAO;
+	private UserStatisticsDAO userStatisticsDAO;
+
+	public Model(ServletConfig config) throws ServletException {
+
+		String jdbcDriver = config.getInitParameter("jdbcDriverName");
+		String jdbcURL = config.getInitParameter("jdbcURL");
+		ConnectionPool pool = new ConnectionPool(jdbcDriver, jdbcURL);
+
+		try {
+			commentDAO = new CommentDAO(pool);
+			tweetDAO = new TweetDAO(pool);
+			userStatisticsDAO = new UserStatisticsDAO(pool);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public UserStatisticsDAO getUserStatisticDAO() {
+		return userStatisticsDAO;
+	}
+
+	public TweetDAO getTweetDAO() {
+		return tweetDAO;
+	}
+
+	public CommentDAO getCommentDAO() {
+		return commentDAO;
+	}
+
+}

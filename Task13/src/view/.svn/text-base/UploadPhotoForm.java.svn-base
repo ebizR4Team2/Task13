@@ -1,0 +1,99 @@
+package view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mybeans.form.FileProperty;
+import org.mybeans.form.FormBean;
+
+public class UploadPhotoForm extends FormBean {
+	private String button = "";
+	private String title = "";
+	private String description = "";
+	private String tags = "";
+	private FileProperty photo1 = null;
+	private FileProperty photo2 = null;
+
+	public String getButton() {
+		return button;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public FileProperty getPhoto1() {
+		return photo1;
+	}
+
+	public FileProperty getPhoto2() {
+		return photo2;
+	}
+
+	public void setButton(String button) {
+		this.button = button;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setPhoto1(FileProperty photo1) {
+		this.photo1 = photo1;
+	}
+
+	public void setPhoto2(FileProperty photo2) {
+		this.photo2 = photo2;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+
+	@Override
+	public List<String> getValidationErrors() {
+		List<String> errors = new ArrayList<String>();
+
+		if (photo1 == null || photo1.getFileName().length() == 0) {
+			errors.add("You must provide before photo");
+			return errors;
+		}
+
+		if (photo2 == null || photo2.getFileName().length() == 0) {
+			errors.add("You must provide after photo");
+			return errors;
+		}
+
+		if (!(isValidType(photo1) && isValidType(photo2))) {
+			errors.add("Invalid file type.Please upload jpg, gif or png");
+			return errors;
+		}
+
+		if (photo1.getBytes().length == 0 || photo1.getBytes().length == 0) {
+			errors.add("Zero length file");
+		}
+
+		return errors;
+	}
+
+	private boolean isValidType(FileProperty file) {
+		String type = file.getFileName().toLowerCase();
+		if (type.endsWith("jpg") || type.endsWith("gif")
+				|| type.endsWith("png")) {
+			return true;
+		}
+		return false;
+	}
+}
